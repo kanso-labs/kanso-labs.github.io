@@ -1,0 +1,255 @@
+/* The page's own CSS: the rhythm between its regions, the two-column rows
+ * that stack on a phone, and the mark. kanso-ui's Container and Stack carry
+ * the measure, the gutter and the gaps inside a region.
+ *
+ * Nothing here styles a component, apart from the hero's type, which steps
+ * down a role on a phone. kanso-ui's styles sit in cascade layers, so these
+ * unlayered rules win without raising their specificity. */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--kui-color-surface);
+  color: var(--kui-color-on-surface);
+  font-family: var(--kui-typography-font-family-plain);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The mark is the organization's avatar, ink on a white ground. Multiplied
+ * over the page the white disappears into it; in the dark scheme it is
+ * inverted and screened, so the ink turns light and the ground drops out. */
+.mark {
+  display: block;
+  inline-size: auto;
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-color-scheme: dark) {
+  .mark {
+    filter: invert(1);
+    mix-blend-mode: screen;
+  }
+}
+
+/* Header ------------------------------------------------------------------ */
+
+.site-header {
+  border-block-end: 1px solid var(--kui-color-outline-variant);
+}
+
+.site-header__row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kui-spacing-lg);
+  justify-content: space-between;
+  padding-block: var(--kui-spacing-lg);
+}
+
+.site-header__home {
+  border-radius: var(--kui-radius-xs);
+}
+
+.site-header__home .mark {
+  block-size: 56px;
+}
+
+/* A phone has no room for the section links beside the mark, and the page is
+ * one scroll long, so only the way to GitHub stays. */
+@media (max-width: 599px) {
+  .site-nav__section {
+    display: none;
+  }
+
+  .site-header__home .mark {
+    block-size: 44px;
+  }
+}
+
+/* Regions ----------------------------------------------------------------- */
+
+.hero {
+  padding-block: clamp(56px, 10vw, 128px) clamp(64px, 9vw, 112px);
+}
+
+.hero__body {
+  max-inline-size: 920px;
+}
+
+/* One role down on a phone: display small and body large, so the headline
+ * takes three lines rather than six. */
+@media (max-width: 599px) {
+  .hero__title {
+    font-size: var(--kui-typography-display-small-size);
+    letter-spacing: var(--kui-typography-display-small-tracking);
+    line-height: var(--kui-typography-display-small-line-height);
+  }
+
+  .hero__lede {
+    font-family: var(--kui-typography-body-large-font);
+    font-size: var(--kui-typography-body-large-size);
+    font-weight: var(--kui-typography-body-large-weight);
+    letter-spacing: var(--kui-typography-body-large-tracking);
+    line-height: var(--kui-typography-body-large-line-height);
+  }
+}
+
+.section {
+  border-block-start: 1px solid var(--kui-color-outline-variant);
+  padding-block: clamp(56px, 8vw, 96px);
+}
+
+.section--tinted {
+  background: var(--kui-color-surface-container-low);
+  border-block-start: 0;
+}
+
+.section__intro {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kui-spacing-lg) 64px;
+  justify-content: space-between;
+}
+
+/* What makes a line hard to read is how many characters it holds, so prose is
+ * measured in `ch` rather than in the page's pixel measure. */
+.measure {
+  max-inline-size: 62ch;
+}
+
+/* A label column beside the content, which wraps under it once there is no
+ * room for both. */
+.split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kui-spacing-lg) 64px;
+}
+
+.split__aside {
+  flex: 1 1 220px;
+}
+
+.split__main {
+  flex: 999 1 640px;
+  min-inline-size: 0;
+}
+
+/* Projects ---------------------------------------------------------------- */
+
+.group {
+  border-block-start: 1px solid var(--kui-color-outline);
+  padding-block: var(--kui-spacing-lg) var(--kui-spacing-xl);
+}
+
+.group__aside {
+  padding-block-start: var(--kui-spacing-xl);
+}
+
+.project {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kui-spacing-lg) 48px;
+  padding-block: var(--kui-spacing-xl);
+}
+
+.project__body {
+  flex: 1 1 420px;
+  min-inline-size: 0;
+}
+
+.project__heading {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kui-spacing-xs) var(--kui-spacing-md);
+}
+
+.project__tags {
+  padding-block-start: var(--kui-spacing-sm);
+}
+
+.project__links {
+  display: flex;
+  flex: 0 0 160px;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: var(--kui-spacing-xs) 0 0;
+}
+
+@media (max-width: 599px) {
+  .project__links {
+    flex-basis: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--kui-spacing-sm) 20px;
+  }
+}
+
+.outbound {
+  margin-inline-start: var(--kui-spacing-xs);
+  vertical-align: -3px;
+}
+
+/* Principles -------------------------------------------------------------- */
+
+.principles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kui-spacing-xxxl) var(--kui-spacing-xxl);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.principle {
+  border-block-start: 1px solid var(--kui-color-outline);
+  flex: 1 1 300px;
+  min-inline-size: 0;
+  padding-block-start: var(--kui-spacing-xl);
+}
+
+/* Roadmap ----------------------------------------------------------------- */
+
+.roadmap {
+  border-block-start: 1px solid var(--kui-color-outline);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.roadmap__item {
+  align-items: baseline;
+  border-block-end: 1px solid var(--kui-color-outline-variant);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kui-spacing-xs) var(--kui-spacing-xl);
+  justify-content: space-between;
+  padding-block: 20px;
+}
+
+/* Footer ------------------------------------------------------------------ */
+
+.site-footer {
+  border-block-start: 1px solid var(--kui-color-outline-variant);
+  padding-block: 48px;
+}
+
+.site-footer__row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kui-spacing-xl) 48px;
+  justify-content: space-between;
+}

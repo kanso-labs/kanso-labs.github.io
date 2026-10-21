@@ -1,0 +1,64 @@
+name: Deploy Pages
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Pages publishes one deployment at a time. Queue rather than cancel, so the
+# last push to main is the one that ends up published.
+concurrency:
+  cancel-in-progress: false
+  group: pages
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build the site
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Node
+        uses: kanso-labs/actions/setup-node@v4.3.1
+
+      - name: Build the site
+        run: npm run build
+
+      # GitHub Pages has no rewrite rules, so it serves 404.html for every path
+      # it has no file for. The not-found route matches every such path and is
+      # prerendered at /404, so its page hydrates under whichever one it is
+      # served for.
+      - name: Add the not-found page
+        run: cp build/client/404/index.html build/client/404.html
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: build/client
+
+  # Pull requests build but do not publish, so a change that no longer builds
+  # is caught while it is still someone's branch rather than on main.
+  deploy:
+    name: Publish the site
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      id-token: write
+      pages: write
+    steps:
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1
