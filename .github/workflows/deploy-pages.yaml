@@ -30,15 +30,25 @@ jobs:
       - name: Set up Node
         uses: kanso-labs/actions/setup-node@v4.3.1
 
+      # The community guidelines are read from kanso-labs/.github as the site
+      # builds. The token keeps those reads out of the anonymous rate limit.
       - name: Build the site
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: npm run build
 
-      # GitHub Pages has no rewrite rules, so it serves 404.html for every path
-      # it has no file for. The not-found route matches every such path and is
+      # The prerender writes each page as <path>/index.html, which GitHub Pages
+      # answers at <path> with a redirect to <path>/. A <path>.html beside it is
+      # served at <path> directly, so each page is published under both names.
+      # One of them is 404.html, which Pages serves for every path it has no
+      # file for. The not-found route matches every such path and is
       # prerendered at /404, so its page hydrates under whichever one it is
       # served for.
-      - name: Add the not-found page
-        run: cp build/client/404/index.html build/client/404.html
+      - name: Publish each page at its own path
+        run: |
+          for page in build/client/*/index.html; do
+            cp "$page" "${page%/index.html}.html"
+          done
 
       - name: Upload the site
         uses: actions/upload-pages-artifact@v5.0.0

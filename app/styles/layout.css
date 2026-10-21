@@ -239,6 +239,123 @@ body {
   padding-block: 20px;
 }
 
+/* Community documents ----------------------------------------------------- */
+
+.document {
+  padding-block: clamp(48px, 8vw, 96px);
+}
+
+/* A prose measure, so the lines of a long document stay readable. */
+.document__article {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kui-spacing-xxxl);
+  max-inline-size: 72ch;
+}
+
+.document__header {
+  border-block-end: 1px solid var(--kui-color-outline-variant);
+  display: flex;
+  flex-direction: column;
+  gap: var(--kui-spacing-md);
+  padding-block-end: var(--kui-spacing-xl);
+}
+
+/* What the Markdown draws. Paragraphs and headings are kanso-ui's Text, so
+ * these rules set only the rhythm between blocks and the elements kanso-ui has
+ * no component for: lists, quotes, tables and code blocks, which take body
+ * large from the tokens, as a paragraph does. */
+.prose {
+  color: var(--kui-color-on-surface);
+  font-family: var(--kui-typography-body-large-font);
+  font-size: var(--kui-typography-body-large-size);
+  letter-spacing: var(--kui-typography-body-large-tracking);
+  line-height: var(--kui-typography-body-large-line-height);
+}
+
+.prose > * {
+  margin-block: 0;
+}
+
+.prose > * + * {
+  margin-block-start: var(--kui-spacing-lg);
+}
+
+.prose > h2 {
+  margin-block-start: var(--kui-spacing-xxxl);
+}
+
+.prose > h3 {
+  margin-block-start: var(--kui-spacing-xl);
+}
+
+/* The article's gap already sets the body apart from the header, so a document
+ * that opens with a heading takes no margin above it. */
+.prose > :first-child {
+  margin-block-start: 0;
+}
+
+/* An anchor lands with the heading clear of the window's top edge. */
+.prose h2,
+.prose h3 {
+  scroll-margin-block-start: var(--kui-spacing-xl);
+}
+
+.prose ol,
+.prose ul {
+  padding-inline-start: 1.5em;
+}
+
+.prose li + li,
+.prose li > ol,
+.prose li > ul {
+  margin-block-start: var(--kui-spacing-xs);
+}
+
+.prose blockquote {
+  border-inline-start: 2px solid var(--kui-color-outline);
+  color: var(--kui-color-on-surface-variant);
+  padding-inline-start: var(--kui-spacing-lg);
+}
+
+.prose pre {
+  background: var(--kui-color-surface-container-low);
+  border-radius: var(--kui-radius-md);
+  font-family: var(--kui-typography-font-family-mono);
+  overflow-x: auto;
+  padding: var(--kui-spacing-lg);
+}
+
+/* A wide table scrolls in its own box rather than widening the page. */
+.prose__table {
+  overflow-x: auto;
+}
+
+.prose table {
+  border-collapse: collapse;
+  min-inline-size: 50%;
+}
+
+.prose th,
+.prose td {
+  border-block-end: 1px solid var(--kui-color-outline-variant);
+  padding: var(--kui-spacing-sm) var(--kui-spacing-lg) var(--kui-spacing-sm) 0;
+  text-align: start;
+}
+
+.prose th {
+  border-block-end-color: var(--kui-color-outline);
+  font-weight: 600;
+}
+
+.document__others {
+  border-block-start: 1px solid var(--kui-color-outline-variant);
+  display: flex;
+  flex-direction: column;
+  gap: var(--kui-spacing-md);
+  padding-block-start: var(--kui-spacing-xl);
+}
+
 /* Footer ------------------------------------------------------------------ */
 
 .site-footer {
