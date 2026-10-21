@@ -20,14 +20,18 @@ const description =
   'Design tokens and the component libraries built on them, Home Assistant applications and integrations, Daily, and the shared CI that releases all of it.'
 
 export const links: Route.LinksFunction = () => [
-  { href: 'https://kansolabs.org/', rel: 'canonical' },
   { href: '/favicon.png', rel: 'icon', type: 'image/png' },
   { href: '/apple-touch-icon.png', rel: 'apple-touch-icon' },
 ]
 
+// The home page's. A route with metadata of its own, as each community
+// document has, replaces all of it, its canonical address included, which is
+// why that address is a meta entry rather than one of the links above: links
+// from every route on the page add up.
 export const meta: Route.MetaFunction = () => [
   { title: 'Kanso Labs' },
   { content: description, name: 'description' },
+  { href: 'https://kansolabs.org/', rel: 'canonical', tagName: 'link' },
   { content: 'Kanso Labs', property: 'og:site_name' },
   { content: 'Kanso Labs', property: 'og:title' },
   { content: description, property: 'og:description' },

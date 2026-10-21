@@ -2,7 +2,6 @@ import {
   Button,
   Code,
   Container,
-  IconButton,
   Link,
   Separator,
   Stack,
@@ -11,107 +10,9 @@ import {
 } from '@kanso-labs/kanso-ui'
 import { Fragment } from 'react'
 
+import { Outbound } from '../components/marks'
+import { GITHUB, MEASURE } from '../components/site'
 import { groups, principles, roadmaps } from '../projects'
-
-const GITHUB = 'https://github.com/kanso-labs'
-// Where the community health files every repository inherits are served from.
-const HEALTH = 'https://github.com/kanso-labs/.github/blob/main'
-const MEASURE = '1200px'
-
-function GitHubMark() {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="currentColor"
-      height="24"
-      viewBox="0 0 16 16"
-      width="24"
-    >
-      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
-    </svg>
-  )
-}
-
-// Marks a link that leaves kansolabs.org.
-function Outbound() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="outbound"
-      fill="none"
-      height="16"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.75"
-      viewBox="0 0 24 24"
-      width="16"
-    >
-      <path d="M7 17 17 7" />
-      <path d="M8 7h9v9" />
-    </svg>
-  )
-}
-
-function Header() {
-  return (
-    <header className="site-header">
-      <Container maxInlineSize={MEASURE}>
-        <div className="site-header__row">
-          <a
-            aria-label="Kanso Labs, home"
-            className="site-header__home"
-            href="/"
-          >
-            <img
-              alt="Kanso"
-              className="mark"
-              height={56}
-              src="/kanso.png"
-              width={133}
-            />
-          </a>
-          <Stack
-            align="center"
-            aria-label="Main"
-            direction="row"
-            gap="xs"
-            render={<nav />}
-          >
-            <Button
-              className="site-nav__section"
-              href="#projects"
-              variant="text"
-            >
-              Projects
-            </Button>
-            <Button
-              className="site-nav__section"
-              href="#principles"
-              variant="text"
-            >
-              Principles
-            </Button>
-            <Button
-              className="site-nav__section"
-              href="#roadmap"
-              variant="text"
-            >
-              Roadmap
-            </Button>
-            <IconButton
-              aria-label="Kanso Labs on GitHub"
-              href={GITHUB}
-              variant="standard"
-            >
-              <GitHubMark />
-            </IconButton>
-          </Stack>
-        </div>
-      </Container>
-    </header>
-  )
-}
 
 function Hero() {
   return (
@@ -337,17 +238,19 @@ function Roadmap() {
             </ul>
             <Stack direction="row" gap="xl" wrap>
               <Text variant="labelLarge">
-                <Link href={`${HEALTH}/CONTRIBUTING.md`} tone="inherit">
+                <Link href="/contributing" tone="inherit">
                   How to contribute
                 </Link>
               </Text>
               <Text variant="labelLarge">
-                <Link href={`${HEALTH}/SUPPORT.md`} tone="inherit">
+                <Link href="/support" tone="inherit">
                   Where to ask a question
                 </Link>
               </Text>
+              {/* The anchor rehype-slug gives SECURITY.md's "Reporting a
+                  Vulnerability" heading. */}
               <Text variant="labelLarge">
-                <Link href={`${HEALTH}/SECURITY.md`} tone="inherit">
+                <Link href="/security#reporting-a-vulnerability" tone="inherit">
                   Report a vulnerability
                 </Link>
               </Text>
@@ -359,85 +262,13 @@ function Roadmap() {
   )
 }
 
-function Footer() {
-  return (
-    <footer className="site-footer">
-      <Container maxInlineSize={MEASURE}>
-        <Stack gap="xxl">
-          <div className="site-footer__row">
-            <Stack align="center" direction="row" gap="lg">
-              <img
-                alt=""
-                className="mark"
-                height={28}
-                src="/leaf.png"
-                width={54}
-              />
-              <Stack gap="xxs">
-                <Text variant="titleMedium">Kanso Labs</Text>
-                <Text tone="muted" variant="bodyMedium">
-                  <Link
-                    href="mailto:contact@kansolabs.org"
-                    tone="inherit"
-                    underline="hover"
-                  >
-                    contact@kansolabs.org
-                  </Link>
-                </Text>
-              </Stack>
-            </Stack>
-            <Stack
-              aria-label="Footer"
-              direction="row"
-              gap="xl"
-              render={<nav />}
-              wrap
-            >
-              <Text variant="labelLarge">
-                <Link href={GITHUB} tone="inherit" underline="hover">
-                  GitHub
-                </Link>
-              </Text>
-              <Text variant="labelLarge">
-                <Link
-                  href={`${HEALTH}/CODE_OF_CONDUCT.md`}
-                  tone="inherit"
-                  underline="hover"
-                >
-                  Code of conduct
-                </Link>
-              </Text>
-              <Text variant="labelLarge">
-                <Link
-                  href={`${HEALTH}/SECURITY.md`}
-                  tone="inherit"
-                  underline="hover"
-                >
-                  Security
-                </Link>
-              </Text>
-            </Stack>
-          </div>
-          <Text block tone="muted" variant="bodySmall">
-            © Kanso Labs. The open-source projects are MIT licensed.
-          </Text>
-        </Stack>
-      </Container>
-    </footer>
-  )
-}
-
 export default function Home() {
   return (
-    <>
-      <Header />
-      <main>
-        <Hero />
-        <Projects />
-        <Principles />
-        <Roadmap />
-      </main>
-      <Footer />
-    </>
+    <main>
+      <Hero />
+      <Projects />
+      <Principles />
+      <Roadmap />
+    </main>
   )
 }
