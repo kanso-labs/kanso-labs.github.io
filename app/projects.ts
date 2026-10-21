@@ -70,6 +70,7 @@ export const groups: Group[] = [
             label: 'Storybook',
           },
           github('react-native-kanso-ui'),
+          npm('@kanso-labs/react-native-kanso-ui'),
         ],
         name: 'Kanso UI for React Native',
         repository: 'react-native-kanso-ui',

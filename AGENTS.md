@@ -139,7 +139,9 @@ under Settings › Pages, or through the API:
 
 **DNS for kansolabs.org is on Cloudflare.** The apex is a flattened CNAME to
 `kanso-labs.github.io`, as each project site's subdomain is a CNAME to the same
-host.
+host, and `www` is a CNAME there too, which Pages redirects to the apex. Both
+are DNS only rather than proxied, so GitHub sees its own servers behind the name
+and issues and renews the HTTPS certificate itself.
 
 ## Commits and pull requests
 
