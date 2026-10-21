@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# What React Router builds and generates
+build/
+.react-router/
+
+# Logs
+*.log
+
+# Vite
+vite.config.ts.timestamp-*
+
+# macOS
+.DS_Store
+
+# Claude Code
+.claude/worktrees/
+.context/
