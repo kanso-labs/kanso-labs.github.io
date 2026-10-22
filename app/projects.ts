@@ -2,6 +2,9 @@
 // their READMEs and GitHub descriptions word them, so a change to what a
 // project is starts there and is copied here.
 
+// The guides for every project, built from kanso-labs/docs.
+export const DOCS = 'https://docs.kansolabs.org'
+
 export interface Link {
   href: string
   label: string
@@ -35,6 +38,12 @@ export interface Roadmap {
   note?: string
 }
 
+// The project's guide on docs.kansolabs.org.
+const docs = (path: string): Link => ({
+  href: `${DOCS}${path}`,
+  label: 'Docs',
+})
+
 const github = (repository: string): Link => ({
   href: `https://github.com/kanso-labs/${repository}`,
   label: 'GitHub',
@@ -53,6 +62,7 @@ export const groups: Group[] = [
         description:
           'A React component library on React Aria Components, styled with StyleX. Every token carries a default, light and dark, so a component renders correctly the moment it is imported.',
         links: [
+          docs('/kanso-ui/web/introduction'),
           { href: 'https://kanso-ui.kansolabs.org/', label: 'Storybook' },
           github('kanso-ui'),
           npm('@kanso-labs/kanso-ui'),
@@ -65,6 +75,7 @@ export const groups: Group[] = [
         description:
           "Kanso UI's Material Design components for React Native, on the same design tokens and theming as kanso-ui, so one theme object serves a web app and a native app alike.",
         links: [
+          docs('/kanso-ui/react-native/introduction'),
           {
             href: 'https://react-native-kanso-ui.kansolabs.org/',
             label: 'Storybook',
@@ -80,6 +91,7 @@ export const groups: Group[] = [
         description:
           'Compiles Style Dictionary design tokens ahead of your bundler. One implementation targets Vite, Rolldown, Rollup, Rspack and Webpack, with watching and HMR under Vite.',
         links: [
+          docs('/style-dictionary/introduction'),
           github('unplugin-style-dictionary'),
           npm('@kanso-labs/unplugin-style-dictionary'),
         ],
@@ -118,6 +130,7 @@ export const groups: Group[] = [
         description:
           'Home Assistant applications for the arr stack, Plex, qBittorrent, NZBGet, Seerr and n8n. aarch64 and amd64, kept current automatically.',
         links: [
+          docs('/home-assistant/applications/introduction'),
           { href: 'https://home-assistant.kansolabs.org/', label: 'Catalogue' },
           github('home-assistant-applications'),
         ],
@@ -128,7 +141,10 @@ export const groups: Group[] = [
       {
         description:
           "A Home Assistant integration, installed through HACS, that draws live maps of Xiaomi, Roborock, Dreame, Viomi, Roidmi and iJai robot vacuums from Xiaomi's cloud, with no rooting. Built on Piotr Machowski's Xiaomi Cloud Map Extractor.",
-        links: [github('home-assistant-robot-vacuum-map')],
+        links: [
+          docs('/home-assistant/robot-vacuum-map/introduction'),
+          github('home-assistant-robot-vacuum-map'),
+        ],
         name: 'Robot Vacuum Map',
         repository: 'home-assistant-robot-vacuum-map',
         tags: ['HACS', 'Python'],
@@ -143,7 +159,7 @@ export const groups: Group[] = [
       {
         description:
           'Shared composite actions and reusable workflows: Node setup, workflow linting, release-please, npm trusted publishing and @renovate commands.',
-        links: [github('actions')],
+        links: [docs('/engineering/shared-actions'), github('actions')],
         name: 'Actions',
         repository: 'actions',
         tags: ['GitHub Actions'],
@@ -151,7 +167,7 @@ export const groups: Group[] = [
       {
         description:
           'The self-hosted Renovate runner. One scheduled workflow keeps dependencies current across every repository, with @renovate comment commands.',
-        links: [github('renovate')],
+        links: [docs('/engineering/renovate'), github('renovate')],
         name: 'Renovate',
         repository: 'renovate',
         tags: ['Renovate'],

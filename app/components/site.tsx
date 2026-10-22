@@ -7,6 +7,7 @@ import {
   Text,
 } from '@kanso-labs/kanso-ui'
 
+import { DOCS } from '../projects'
 import { GitHubMark } from './marks'
 
 export const GITHUB = 'https://github.com/kanso-labs'
@@ -61,6 +62,9 @@ export function SiteHeader() {
             >
               Roadmap
             </Button>
+            <Button href={DOCS} variant="text">
+              Docs
+            </Button>
             <IconButton
               aria-label="Kanso Labs on GitHub"
               href={GITHUB}
@@ -112,6 +116,11 @@ export function SiteFooter() {
               <Text variant="labelLarge">
                 <Link href={GITHUB} tone="inherit" underline="hover">
                   GitHub
+                </Link>
+              </Text>
+              <Text variant="labelLarge">
+                <Link href={DOCS} tone="inherit" underline="hover">
+                  Docs
                 </Link>
               </Text>
               <Text variant="labelLarge">

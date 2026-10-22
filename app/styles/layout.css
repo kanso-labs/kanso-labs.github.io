@@ -64,7 +64,7 @@ body {
 }
 
 /* A phone has no room for the section links beside the mark, and the page is
- * one scroll long, so only the way to GitHub stays. */
+ * one scroll long, so only the ways to the docs and to GitHub stay. */
 @media (max-width: 599px) {
   .site-nav__section {
     display: none;
