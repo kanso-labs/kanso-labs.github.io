@@ -245,12 +245,12 @@ body {
   padding-block: clamp(48px, 8vw, 96px);
 }
 
-/* A prose measure, so the lines of a long document stay readable. */
+/* The article runs to the page's measure, the same width as the header and
+ * footer around it. */
 .document__article {
   display: flex;
   flex-direction: column;
   gap: var(--kui-spacing-xxxl);
-  max-inline-size: 72ch;
 }
 
 .document__header {
