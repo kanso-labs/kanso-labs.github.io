@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v7.0.1
 
       - name: Set up Node
-        uses: kanso-labs/actions/setup-node@v4.4.0
+        uses: kanso-labs/actions/setup-node@v4.4.1
 
       # The community guidelines are read from kanso-labs/.github as the site
       # builds. The token keeps those reads out of the anonymous rate limit.
