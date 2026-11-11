@@ -172,6 +172,15 @@ and issues and renews the HTTPS certificate itself.
 
 ## Commits and pull requests
 
+**Dependabot raises security updates here and nothing else.**
+`.github/dependabot.yaml` has an entry for `npm` and one for `github-actions`,
+each with `open-pull-requests-limit: 0`, which turns version updates off and
+leaves security updates on, and `commit-message.prefix: deps`. Without the
+prefix Dependabot's title, such as
+`chore(deps-dev): Bump … in the npm_and_yarn group across 1 directory`, fails
+`Lint`, and `dependabot-auto-merge.yaml` waits on `Lint` for ever. Renovate
+still owns version updates.
+
 Pull requests are squash-merged, with the pull request title as the commit
 subject, so that title is the one line that reaches `main`. It is a Conventional
 Commit, and `Lint` runs it through commitlint. `.commitlintrc.json` admits
