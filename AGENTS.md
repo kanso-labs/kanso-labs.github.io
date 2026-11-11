@@ -134,7 +134,7 @@ it. Their text lives only in that repository, so nothing here is copied from it.
 
 **A page is the file as it stood when the site was last built.** The build reads
 each file from `main` through the GitHub API, with the date of the last commit
-that changed it. `Deploy Pages` also runs on `workflow_dispatch`, so a rebuild
+that changed it. `Deploy pages` also runs on `workflow_dispatch`, so a rebuild
 needs no commit here.
 
 **A file's first heading is its page's title, and the rest is drawn as Markdown
@@ -145,7 +145,7 @@ before.
 
 ## Deploys
 
-`Deploy Pages` builds every pull request and publishes every push to `main`. It
+`Deploy pages` builds every pull request and publishes every push to `main`. It
 uploads `build/client` as the Pages artifact, after copying each page from
 `<path>/index.html`, where the prerender writes it, to `<path>.html`. Pages
 answers `/contributing` with a redirect to `/contributing/` when all it has is

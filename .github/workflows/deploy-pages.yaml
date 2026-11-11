@@ -1,4 +1,4 @@
-name: Deploy Pages
+name: Deploy pages
 
 on:
   pull_request:
@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   build:
-    name: Build the site
+    name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -58,7 +58,7 @@ jobs:
   # Pull requests build but do not publish, so a change that no longer builds
   # is caught while it is still someone's branch rather than on main.
   deploy:
-    name: Publish the site
+    name: Deploy to GitHub Pages
     needs: build
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
