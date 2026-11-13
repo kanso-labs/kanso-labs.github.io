@@ -7,7 +7,6 @@
     "local>kanso-labs/.github:renovate-config"
   ],
   "lockFileMaintenance": {
-    "automerge": true,
     "enabled": true
   },
   "packageRules": [
