@@ -1,11 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "security:minimumReleaseAgeNpm is extended directly rather than through config:best-practices, whose helpers:pinGitHubActionDigests contradicts the convention that actions are pinned to exact release tags. local>kanso-labs/.github:renovate-config is the organization's shared preset, listed last because a later preset wins a conflict with an earlier one.",
-  "extends": [
-    "config:recommended",
-    "security:minimumReleaseAgeNpm",
-    "local>kanso-labs/.github:renovate-config"
-  ],
+  "description": "local>kanso-labs/.github:renovate-config is the organization's shared preset, listed last because a later preset wins a conflict with an earlier one. config:best-practices is not extended, because its helpers:pinGitHubActionDigests contradicts the convention that actions are pinned to exact release tags, and neither is security:minimumReleaseAgeNpm, because no kanso-labs repository waits out a release age.",
+  "extends": ["config:recommended", "local>kanso-labs/.github:renovate-config"],
   "lockFileMaintenance": {
     "enabled": true
   },
