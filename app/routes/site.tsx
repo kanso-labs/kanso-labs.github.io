@@ -8,10 +8,12 @@ import { SiteFooter, SiteHeader } from '../components/site'
 export default function Site() {
   return (
     <>
+      {/* First, so the keyboard reaches it before the page; it is fixed to
+          the foot of the viewport wherever it sits in the document. */}
+      <AnalyticsBanner />
       <SiteHeader />
       <Outlet />
       <SiteFooter />
-      <AnalyticsBanner />
     </>
   )
 }

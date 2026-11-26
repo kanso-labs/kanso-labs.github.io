@@ -150,6 +150,16 @@ once, with a notice that offers to opt out, and `/privacy` keeps the switch
 within reach from the footer. The choice is kept in local storage under
 `kanso-labs:analytics`.
 
+**GA's cookies stay on the site's own host** (`cookie_domain: 'none'`), since
+each Kanso Labs site keeps its own choice, and **nothing is sent from a host
+other than kansolabs.org or github.io**, so `npm run dev` and `npm run preview`
+draw the banner but never count in the live property.
+
+**Which events are collected is set in GA, not here.** Enhanced measurement on
+the web stream records page views, scrolls, outbound clicks and file downloads,
+which is what `/privacy` lists; switch on another of its events and the note has
+to say so too.
+
 **The banner is fixed to the foot of the viewport**, so it moves nothing on the
 page when it appears after hydration. The prerendered page cannot know a
 visitor's choice, which is why nothing about it is drawn on the server.

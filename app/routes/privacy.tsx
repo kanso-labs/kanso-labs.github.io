@@ -13,7 +13,7 @@ import type { Route } from './+types/privacy'
 
 const title = 'Privacy · Kanso Labs'
 const description =
-  'kansolabs.org counts visits with Google Analytics, anonymously. What it records, for how long, and how to turn it off.'
+  'kansolabs.org counts visits with Google Analytics, without identifying you. What it records, for how long, and how to turn it off.'
 const url = 'https://kansolabs.org/privacy'
 
 export const meta: Route.MetaFunction = () => [
@@ -72,8 +72,8 @@ function Choice() {
     <Stack align="start" gap="md">
       <Paragraph>
         {status === 'granted'
-          ? 'Google Analytics is on for this browser.'
-          : 'Google Analytics is off for this browser.'}
+          ? 'Analytics is on for this site in this browser.'
+          : 'Analytics is off for this site in this browser.'}
       </Paragraph>
       {status === 'granted' ? (
         <Button onPress={analytics.deny} variant="outlined">
@@ -100,18 +100,20 @@ export default function Privacy() {
           </header>
           <div className="prose">
             <Paragraph>
-              This site uses Google Analytics to count visits anonymously, so
-              Kanso Labs can see which pages are read. There are no accounts
-              here and no ads, and nothing that names you is collected.
+              This site uses Google Analytics for anonymous usage statistics: it
+              counts visits, so Kanso Labs can see which pages are read. There
+              are no accounts here and no ads. Nothing that names you is
+              collected; Google Analytics tells one browser from another by a
+              random ID, not by who is using it.
             </Paragraph>
             <Section heading="What is recorded">
               <Paragraph>
-                The pages you open and the page that led you here; how far down
-                a page you scroll; clicks on links that leave the site; and
-                files you download. With each, Google Analytics records your
-                browser, device, language and approximate location, which it
-                derives from your IP address without storing the address. No
-                user ID is set, and nothing you type is sent.
+                The pages you open and the page that led you here; reaching the
+                end of a page; clicks on links that leave the site; and files
+                you download. With each, Google Analytics records your browser,
+                device, language and approximate location, which it derives from
+                your IP address without storing the address. No user ID is set,
+                and nothing you type is sent.
               </Paragraph>
               <Paragraph>
                 Google signals and every advertising feature are off, and the
@@ -122,25 +124,32 @@ export default function Privacy() {
             <Section heading="Cookies">
               <Paragraph>
                 While analytics is on, Google Analytics sets two cookies on this
-                site, <Code>_ga</Code> and one beginning <Code>_ga_</Code>, to
-                tell a returning browser from a new one. Your choice below is
-                kept in your browser&rsquo;s local storage, and goes nowhere
-                else.
+                site alone, <Code>_ga</Code> and one beginning <Code>_ga_</Code>
+                , to tell a returning browser from a new one. Each Kanso Labs
+                site keeps its own, so your choice here applies to this site
+                only. It is kept in your browser&rsquo;s local storage, and goes
+                nowhere else.
               </Paragraph>
             </Section>
             <Section heading="How long it is kept">
               <Paragraph>
-                Google Analytics keeps the records for 14 months and then
-                deletes them.
+                Google Analytics deletes the records of each visit after 14
+                months. The totals in its reports, such as how many times a page
+                was read in a month, are kept.
               </Paragraph>
             </Section>
             <Section heading="Your choice">
               <Paragraph>
                 In the European Economic Area, the United Kingdom and
-                Switzerland, nothing is collected until you allow it. The site
-                tells where you are from your browser&rsquo;s time zone, and
-                asks whenever it is unsure. Elsewhere analytics is on until you
-                turn it off.
+                Switzerland, the site asks before it loads Google Analytics, and
+                nothing is sent until you allow it. A static site cannot see
+                where you are, so it goes by your browser&rsquo;s time zone, and
+                asks whenever the zone leaves it unsure. Elsewhere analytics is
+                on until you turn it off. If your browser keeps the time of
+                another place while you are in one of those, Google still keeps
+                its cookies off for you, by your IP address, though it may
+                receive the visit without them; turning analytics off here stops
+                that too.
               </Paragraph>
               <Choice />
               <Paragraph>

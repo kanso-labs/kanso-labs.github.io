@@ -19,6 +19,11 @@
  * time zone, and a zone that is missing or tells nothing, such as UTC, counts
  * as one that asks. Where this file asks, gtag.js is not loaded at all until
  * the visitor agrees, so nothing reaches Google before then.
+ *
+ * GA's cookies are kept to the site's own host rather than shared across
+ * kansolabs.org, since each site keeps its own choice. Nothing is sent from a
+ * host that is not a published one, such as localhost, so a local build never
+ * counts in the live property.
  */
 ;(function () {
   'use strict'
@@ -28,13 +33,16 @@
   var id = options.measurementId
   if (!id || window.kansoAnalytics) return
 
+  var live = /(^|\.)(kansolabs\.org|github\.io)$/.test(window.location.hostname)
   var KEY = 'kanso-labs:analytics'
   var EVENT = 'kanso-analytics'
 
-  // Where analytics storage starts denied: the EU, its outermost regions that
-  // have codes of their own, the rest of the EEA, the UK and Switzerland.
+  // Where analytics storage starts denied: the EU, with Åland and the
+  // outermost regions that have codes of their own, the rest of the EEA, the
+  // UK with the Crown Dependencies, Gibraltar, and Switzerland.
   var REGIONS = [
     'AT',
+    'AX',
     'BE',
     'BG',
     'CH',
@@ -48,13 +56,17 @@
     'FR',
     'GB',
     'GF',
+    'GG',
+    'GI',
     'GP',
     'GR',
     'HR',
     'HU',
     'IE',
+    'IM',
     'IS',
     'IT',
+    'JE',
     'LI',
     'LT',
     'LU',
@@ -90,6 +102,7 @@
     'Atlantic/Azores',
     'Atlantic/Canary',
     'Atlantic/Faroe',
+    'Atlantic/Jan_Mayen',
     'Atlantic/Madeira',
     'Atlantic/Reykjavik',
     'Indian/Mayotte',
@@ -157,8 +170,9 @@
   function load() {
     if (loaded) return
     loaded = true
+    if (!live) return
     gtag('js', new Date())
-    gtag('config', id, { allow_google_signals: false })
+    gtag('config', id, { allow_google_signals: false, cookie_domain: 'none' })
     var tag = document.createElement('script')
     tag.async = true
     tag.src =
@@ -170,6 +184,7 @@
   function forget() {
     var host = window.location.hostname
     var domains = ['', host, '.' + host]
+    // Where GA kept them before they were confined to the host.
     var parent = host.split('.').slice(-2).join('.')
     if (parent !== host) domains.push('.' + parent)
     document.cookie.split(';').forEach(function (cookie) {
@@ -251,17 +266,17 @@
     var STYLE =
       '.kanso-analytics{position:fixed;inset-inline:16px;inset-block-end:16px;z-index:2147483647;' +
       'box-sizing:border-box;max-inline-size:560px;margin-inline:auto;padding:16px;border-radius:12px;' +
-      'color-scheme:light dark;background:light-dark(#fff,#2b2b2b);color:light-dark(#1b1b1b,#e6e6e6);' +
+      'color-scheme:light dark;background:#fff;color:#1b1b1b;background:light-dark(#fff,#2b2b2b);color:light-dark(#1b1b1b,#e6e6e6);' +
       'box-shadow:0 1px 3px rgb(0 0 0/.3),0 4px 8px 3px rgb(0 0 0/.15);' +
       'font:400 14px/20px "Roboto Flex Variable","Roboto Flex",Roboto,system-ui,sans-serif;letter-spacing:.25px}' +
       '.kanso-analytics p{margin:0}' +
       '.kanso-analytics a{color:inherit;text-decoration:underline}' +
       '.kanso-analytics div{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-block-start:12px}' +
       '.kanso-analytics button{min-block-size:40px;padding-inline:16px;border-radius:20px;cursor:pointer;' +
-      'font:500 14px/20px inherit;font-family:inherit;letter-spacing:.1px;border:1px solid light-dark(#777,#8e8e8e);' +
+      'font:inherit;font-weight:500;letter-spacing:.1px;border:1px solid #777;border-color:light-dark(#777,#8e8e8e);' +
       'background:transparent;color:inherit}' +
-      '.kanso-analytics button[data-primary]{border-color:transparent;background:light-dark(#1b1b1b,#e6e6e6);' +
-      'color:light-dark(#fff,#1b1b1b)}' +
+      '.kanso-analytics button[data-primary]{border-color:transparent;background:#1b1b1b;color:#fff;' +
+      'background:light-dark(#1b1b1b,#e6e6e6);color:light-dark(#fff,#1b1b1b)}' +
       '.kanso-analytics button:focus-visible,.kanso-analytics a:focus-visible{outline:3px solid light-dark(#1b1b1b,#e6e6e6);outline-offset:2px}'
 
     function button(label, action, primary) {
@@ -293,8 +308,8 @@
       var text = document.createElement('p')
       text.textContent =
         kind === 'consent'
-          ? 'May this site count your visit with Google Analytics? It records the pages you open, anonymously, and nothing is sent unless you allow it. '
-          : 'This site counts visits with Google Analytics: the pages opened, anonymously. '
+          ? 'May this site count your visit with Google Analytics? It records the pages you open, without your name or any account, and nothing is sent unless you allow it. '
+          : 'This site counts visits with Google Analytics: the pages opened, without your name or any account. '
       if (window.kansoAnalytics.privacyUrl) {
         var link = document.createElement('a')
         link.href = window.kansoAnalytics.privacyUrl
@@ -312,7 +327,8 @@
         actions.appendChild(button('OK', dismiss, true))
       }
       root.appendChild(actions)
-      document.body.appendChild(root)
+      // First in the document, so the keyboard reaches it before the page.
+      document.body.prepend(root)
     }
 
     window.addEventListener(EVENT, draw)

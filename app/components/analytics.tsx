@@ -71,8 +71,8 @@ export function AnalyticsBanner() {
         <Stack gap="md">
           <Text block variant="bodyMedium">
             {consent
-              ? 'May this site count your visit with Google Analytics? It records the pages you open, anonymously, and nothing is sent unless you allow it. '
-              : 'This site counts visits with Google Analytics: the pages opened, anonymously. '}
+              ? 'May this site count your visit with Google Analytics? It records the pages you open, without your name or any account, and nothing is sent unless you allow it. '
+              : 'This site counts visits with Google Analytics: the pages opened, without your name or any account. '}
             <Link href={PRIVACY} tone="inherit" underline="always">
               Privacy
             </Link>
