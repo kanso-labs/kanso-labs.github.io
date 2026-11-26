@@ -17,19 +17,21 @@ hydrates it. Its components come from
 [kanso-ui](https://github.com/kanso-labs/kanso-ui), themed with the
 organization's own palette.
 
-| Path                       | What it is                                                                         |
-| -------------------------- | ---------------------------------------------------------------------------------- |
-| `app/routes/home.tsx`      | The home page                                                                      |
-| `app/routes/document.tsx`  | A community guideline's page, one route per guideline                              |
-| `app/routes/not-found.tsx` | Every other path, published as `404.html`                                          |
-| `app/routes/site.tsx`      | The header and footer around every page                                            |
-| `app/projects.ts`          | What the home page lists: the project groups, the principles and the roadmaps      |
-| `app/documents.ts`         | Which guidelines are pages, at which paths, and where the links inside them lead   |
-| `app/documents.server.ts`  | Reads each guideline from GitHub as the site builds                                |
-| `app/styles/theme.css`     | The palette and type, as kanso-ui `--kui-*` tokens                                 |
-| `app/styles/layout.css`    | The pages' own layout: region rhythm, the columns that stack on a phone, the prose |
-| `app/root.tsx`             | The document, its metadata, and the state shown when a page fails                  |
-| `public/`                  | The mark and the favicons, copied into the build as they are                       |
+| Path                           | What it is                                                                         |
+| ------------------------------ | ---------------------------------------------------------------------------------- |
+| `app/routes/home.tsx`          | The home page                                                                      |
+| `app/routes/document.tsx`      | A community guideline's page, one route per guideline                              |
+| `app/routes/not-found.tsx`     | Every other path, published as `404.html`                                          |
+| `app/routes/privacy.tsx`       | The privacy note, and the switch that turns analytics on or off                    |
+| `app/routes/site.tsx`          | The header, the footer and the analytics banner around every page                  |
+| `app/components/analytics.tsx` | The analytics banner, in kanso-ui, and the measurement ID                          |
+| `app/projects.ts`              | What the home page lists: the project groups, the principles and the roadmaps      |
+| `app/documents.ts`             | Which guidelines are pages, at which paths, and where the links inside them lead   |
+| `app/documents.server.ts`      | Reads each guideline from GitHub as the site builds                                |
+| `app/styles/theme.css`         | The palette and type, as kanso-ui `--kui-*` tokens                                 |
+| `app/styles/layout.css`        | The pages' own layout: region rhythm, the columns that stack on a phone, the prose |
+| `app/root.tsx`                 | The document, its metadata, and the state shown when a page fails                  |
+| `public/`                      | The mark, the favicons and `analytics.js`, copied into the build as they are       |
 
 The design is the Claude Design canvas "Kanso Labs Home Page", direction A, Ink.
 It draws the page at desktop width in light and dark, and at a phone's.
@@ -122,6 +124,35 @@ these unlayered rules win without raising their specificity.
 multiplies them over the page so the white disappears, and inverts and screens
 them in the dark scheme so the ink turns light. Replace them with a vector the
 day one exists, and drop the blend.
+
+## Analytics
+
+**The site counts visits with Google Analytics 4, through gtag.js and no Tag
+Manager, behind Google Consent Mode v2.** The measurement ID, `G-G5J7LFENG0`, is
+public by nature, so it sits in `app/components/analytics.tsx` rather than in a
+secret. The property is shared with docs.kansolabs.org.
+
+**`public/analytics.js` is the same file in every Kanso Labs site that loads
+gtag.js itself**: this one, the Home Assistant applications site and both
+Storybooks. Change one copy and carry the change to the others. The attributes
+of the `<script>` tag that loads it, in `app/root.tsx`, say what differs between
+sites. Here `data-banner="none"` tells it the site draws the banner, which
+`components/analytics.tsx` does in kanso-ui through `window.kansoAnalytics`.
+
+**Ads signals are denied for everyone. Analytics storage is denied in the EEA,
+the UK and Switzerland, and granted elsewhere.** Google applies that default by
+the visitor's IP. Whether to show the banner that asks is decided from the
+browser's time zone, since Pages gives a static site no geo header: every
+`Europe/` zone, the EU's zones elsewhere in the tz database, and a zone that
+says nothing, such as `UTC`, ask. Where it asks, gtag.js is not loaded until the
+visitor allows it, so nothing reaches Google before then. Elsewhere it loads at
+once, with a notice that offers to opt out, and `/privacy` keeps the switch
+within reach from the footer. The choice is kept in local storage under
+`kanso-labs:analytics`.
+
+**The banner is fixed to the foot of the viewport**, so it moves nothing on the
+page when it appears after hydration. The prerendered page cannot know a
+visitor's choice, which is why nothing about it is drawn on the server.
 
 ## The community guidelines
 
