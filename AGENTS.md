@@ -152,8 +152,8 @@ within reach from the footer. The choice is kept in local storage under
 
 **GA's cookies stay on the site's own host** (`cookie_domain: 'none'`), since
 each Kanso Labs site keeps its own choice, and **nothing is sent from a host
-other than kansolabs.org or github.io**, so `npm run dev` and `npm run preview`
-draw the banner but never count in the live property.
+outside kansolabs.org**, so `npm run dev` and `npm run preview` draw the banner
+but never count in the live property.
 
 **Which events are collected is set in GA, not here.** Enhanced measurement on
 the web stream records page views, scrolls, outbound clicks and file downloads,
