@@ -8,6 +8,7 @@ import {
 } from '@kanso-labs/kanso-ui'
 
 import { DOCS } from '../projects'
+import { PRIVACY } from './analytics'
 import { GitHubMark } from './marks'
 
 export const GITHUB = 'https://github.com/kanso-labs'
@@ -131,6 +132,11 @@ export function SiteFooter() {
               <Text variant="labelLarge">
                 <Link href="/security" tone="inherit" underline="hover">
                   Security
+                </Link>
+              </Text>
+              <Text variant="labelLarge">
+                <Link href={PRIVACY} tone="inherit" underline="hover">
+                  Privacy
                 </Link>
               </Text>
             </Stack>

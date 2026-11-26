@@ -7,6 +7,11 @@ export default {
   // HTML at build time. Visitors and crawlers get the whole page before any
   // script loads, and the script only hydrates it. /404 is the not-found page,
   // which the deploy publishes as 404.html.
-  prerender: ['/', '/404', ...documents.map((document) => `/${document.slug}`)],
+  prerender: [
+    '/',
+    '/404',
+    '/privacy',
+    ...documents.map((document) => `/${document.slug}`),
+  ],
   ssr: false,
 } satisfies Config

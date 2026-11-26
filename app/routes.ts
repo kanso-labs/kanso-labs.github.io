@@ -10,6 +10,7 @@ import { documents } from './documents'
 export default [
   layout('routes/site.tsx', [
     index('routes/home.tsx'),
+    route('privacy', 'routes/privacy.tsx'),
     // One route per community document, all drawn by the same module, which
     // reads which document it is from the path.
     ...documents.map((document) =>

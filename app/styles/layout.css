@@ -370,3 +370,18 @@ body {
   gap: var(--kui-spacing-xl) 48px;
   justify-content: space-between;
 }
+
+/* Analytics banner -------------------------------------------------------- */
+
+/* Fixed to the foot of the viewport, so it covers a strip of the page rather
+ * than pushing anything when it appears. Room left for it beneath the page
+ * would be that shift; it is first in the document, so the keyboard meets it
+ * before anything it covers, and it goes once answered. */
+.analytics-banner {
+  inset-block-end: var(--kui-spacing-lg);
+  inset-inline: var(--kui-spacing-lg);
+  margin-inline: auto;
+  max-inline-size: 560px;
+  position: fixed;
+  z-index: 10;
+}

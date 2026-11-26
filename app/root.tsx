@@ -14,6 +14,7 @@ import './styles/layout.css'
 
 import { Button, Container, Stack, Text } from '@kanso-labs/kanso-ui'
 
+import { MEASUREMENT_ID, PRIVACY } from './components/analytics'
 import type { Route } from './+types/root'
 
 const description =
@@ -59,6 +60,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <Meta />
         <Links />
+        {/* Google Analytics behind Consent Mode. It loads gtag.js itself, and
+            only once the visitor may be counted; the banner is the site's
+            own, drawn by components/analytics. */}
+        <script
+          async
+          data-banner="none"
+          data-measurement-id={MEASUREMENT_ID}
+          data-privacy-url={PRIVACY}
+          src="/analytics.js"
+        />
       </head>
       <body>
         {children}
