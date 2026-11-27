@@ -27,7 +27,9 @@ body {
 /* The mark is the organization's avatar, ink on a white ground. Multiplied
  * over the page the white disappears into it; in the dark scheme it is
  * inverted and screened, so the ink turns light and the ground drops out. */
+/* The logo takes the page's ink, not the colour of a link around it. */
 .logo {
+  color: var(--kui-color-on-surface);
   display: inline-block;
   line-height: 0;
 }
