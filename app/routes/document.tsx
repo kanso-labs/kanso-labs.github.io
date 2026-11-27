@@ -10,7 +10,7 @@ import Markdown, { type Components } from 'react-markdown'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 
-import { MEASURE } from '../components/site'
+import { CARD, MEASURE } from '../components/site'
 import { documentBySlug, documents, resolveHref, sourceUrl } from '../documents'
 import { loadDocument } from '../documents.server'
 import type { Route } from './+types/document'
@@ -49,6 +49,7 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
     { content: loaderData.description, property: 'og:description' },
     { content: url, property: 'og:url' },
     { content: 'article', property: 'og:type' },
+    ...CARD,
   ]
 }
 
