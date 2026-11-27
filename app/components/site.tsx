@@ -11,6 +11,7 @@ import { DOCS } from '../projects'
 import { PRIVACY } from './analytics'
 import { GitHubMark, Logo } from './marks'
 
+export const BRAND = 'https://brand.kansolabs.org'
 export const GITHUB = 'https://github.com/kanso-labs'
 // The social card, from kanso-labs/brand. A route with metadata of its own
 // replaces the home page's, so each one lists it.
@@ -123,6 +124,11 @@ export function SiteFooter() {
               <Text variant="labelLarge">
                 <Link href={DOCS} tone="inherit" underline="hover">
                   Docs
+                </Link>
+              </Text>
+              <Text variant="labelLarge">
+                <Link href={BRAND} tone="inherit" underline="hover">
+                  Brand
                 </Link>
               </Text>
               <Text variant="labelLarge">
