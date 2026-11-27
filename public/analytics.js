@@ -168,6 +168,12 @@
   }
 
   function write(value) {
+    // The old copy goes too, so that it cannot come back where cookies fail.
+    try {
+      window.localStorage.removeItem(KEY)
+    } catch (error) {
+      // Storage is off: there is nothing to remove.
+    }
     // A cookie of the same name kept to this host alone would be read beside
     // the shared one, and could outlast it.
     if (live) document.cookie = COOKIE + '=; Max-Age=0; Path=/'
@@ -186,16 +192,20 @@
   // cookies off it still stands.
   function read() {
     var value = cookie()
+    var moved = false
     try {
       var kept = window.localStorage.getItem(KEY)
       if (kept === null) return value
       if (kept === NOTIFIED) kept = NOTICE
       var known = kept === GRANTED || kept === DENIED || kept === NOTICE
       if (!value && known) {
+        moved = true
         write(kept)
         value = kept
+        // Kept where the cookie did not hold it, as with cookies off.
+        if (!cookie()) window.localStorage.setItem(KEY, kept)
       }
-      if (cookie() || !known) window.localStorage.removeItem(KEY)
+      if (!moved) window.localStorage.removeItem(KEY)
     } catch (error) {
       // Storage is off: there is nothing to move.
     }
