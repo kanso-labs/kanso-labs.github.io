@@ -27,17 +27,19 @@ body {
 /* The mark is the organization's avatar, ink on a white ground. Multiplied
  * over the page the white disappears into it; in the dark scheme it is
  * inverted and screened, so the ink turns light and the ground drops out. */
-.mark {
-  display: block;
-  inline-size: auto;
-  mix-blend-mode: multiply;
+.logo {
+  display: inline-block;
+  line-height: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  .mark {
-    filter: invert(1);
-    mix-blend-mode: screen;
-  }
+.logo svg {
+  block-size: 100%;
+  display: block;
+  inline-size: auto;
+}
+
+.site-footer .logo {
+  block-size: 28px;
 }
 
 /* Header ------------------------------------------------------------------ */
@@ -59,8 +61,8 @@ body {
   border-radius: var(--kui-radius-xs);
 }
 
-.site-header__home .mark {
-  block-size: 56px;
+.site-header__home .logo {
+  block-size: 28px;
 }
 
 /* A phone has no room for the section links beside the mark, and the page is
@@ -70,8 +72,8 @@ body {
     display: none;
   }
 
-  .site-header__home .mark {
-    block-size: 44px;
+  .site-header__home .logo {
+    block-size: 24px;
   }
 }
 

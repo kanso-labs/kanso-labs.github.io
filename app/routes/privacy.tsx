@@ -8,7 +8,7 @@ import {
 } from '@kanso-labs/kanso-ui'
 
 import { useAnalytics } from '../components/analytics'
-import { MEASURE } from '../components/site'
+import { CARD, MEASURE } from '../components/site'
 import type { Route } from './+types/privacy'
 
 const title = 'Privacy · Kanso Labs'
@@ -25,6 +25,7 @@ export const meta: Route.MetaFunction = () => [
   { content: description, property: 'og:description' },
   { content: url, property: 'og:url' },
   { content: 'article', property: 'og:type' },
+  ...CARD,
 ]
 
 function Section({

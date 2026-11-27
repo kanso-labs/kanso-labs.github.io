@@ -1,3 +1,29 @@
+import horizontal from '../assets/kanso-horizontal.svg?raw'
+import leaf from '../assets/kanso-mark.svg?raw'
+
+// The Kanso Labs logo, copied unmodified from kanso-labs/brand's logo/svg/ and
+// drawn inline in currentColor, so it takes the text colour around it in
+// either scheme.
+const logos = { horizontal, leaf }
+
+function inline(svg: string) {
+  return svg
+    .replace(/<title>[^<]*<\/title>\s*/, '')
+    .replace(/ width="[^"]*" height="[^"]*"/, '')
+    .replace(/ role="img"/, ' aria-hidden="true" focusable="false"')
+    .replaceAll('fill="#1a1a1a"', 'fill="currentColor"')
+}
+
+export function Logo({ form }: { form: keyof typeof logos }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`logo logo--${form}`}
+      dangerouslySetInnerHTML={{ __html: inline(logos[form]) }}
+    />
+  )
+}
+
 export function GitHubMark() {
   return (
     <svg

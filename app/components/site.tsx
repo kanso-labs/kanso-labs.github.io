@@ -9,9 +9,22 @@ import {
 
 import { DOCS } from '../projects'
 import { PRIVACY } from './analytics'
-import { GitHubMark } from './marks'
+import { GitHubMark, Logo } from './marks'
 
 export const GITHUB = 'https://github.com/kanso-labs'
+// The social card, from kanso-labs/brand. A route with metadata of its own
+// replaces the home page's, so each one lists it.
+export const CARD = [
+  {
+    content: 'https://kansolabs.org/og-card-1200x630.png',
+    property: 'og:image',
+  },
+  { content: '1200', property: 'og:image:width' },
+  { content: '630', property: 'og:image:height' },
+  { content: 'Kanso Labs', property: 'og:image:alt' },
+  { content: 'summary_large_image', name: 'twitter:card' },
+]
+
 // The width every region's content stops growing at.
 export const MEASURE = '1200px'
 
@@ -25,13 +38,7 @@ export function SiteHeader() {
             className="site-header__home"
             href="/"
           >
-            <img
-              alt="Kanso"
-              className="mark"
-              height={56}
-              src="/kanso.png"
-              width={133}
-            />
+            <Logo form="horizontal" />
           </a>
           {/* The sections are on the home page, so from any other page these
               links lead back to it. */}
@@ -87,13 +94,7 @@ export function SiteFooter() {
         <Stack gap="xxl">
           <div className="site-footer__row">
             <Stack align="center" direction="row" gap="lg">
-              <img
-                alt=""
-                className="mark"
-                height={28}
-                src="/leaf.png"
-                width={54}
-              />
+              <Logo form="leaf" />
               <Stack gap="xxs">
                 <Text variant="titleMedium">Kanso Labs</Text>
                 <Text tone="muted" variant="bodyMedium">

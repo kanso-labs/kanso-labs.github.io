@@ -15,14 +15,17 @@ import './styles/layout.css'
 import { Button, Container, Stack, Text } from '@kanso-labs/kanso-ui'
 
 import { MEASUREMENT_ID, PRIVACY } from './components/analytics'
+import { CARD } from './components/site'
 import type { Route } from './+types/root'
 
 const description =
   'Design tokens and the component libraries built on them, Home Assistant applications and integrations, Daily, and the shared CI that releases all of it.'
 
 export const links: Route.LinksFunction = () => [
-  { href: '/favicon.png', rel: 'icon', type: 'image/png' },
+  { href: '/favicon.ico', rel: 'icon', sizes: '48x48' },
+  { href: '/favicon.svg', rel: 'icon', type: 'image/svg+xml' },
   { href: '/apple-touch-icon.png', rel: 'apple-touch-icon' },
+  { href: '/site.webmanifest', rel: 'manifest' },
 ]
 
 // The home page's. A route with metadata of its own, as each community
@@ -38,6 +41,7 @@ export const meta: Route.MetaFunction = () => [
   { content: description, property: 'og:description' },
   { content: 'https://kansolabs.org/', property: 'og:url' },
   { content: 'website', property: 'og:type' },
+  ...CARD,
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {

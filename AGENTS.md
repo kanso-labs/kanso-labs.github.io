@@ -17,21 +17,22 @@ hydrates it. Its components come from
 [kanso-ui](https://github.com/kanso-labs/kanso-ui), themed with the
 organization's own palette.
 
-| Path                           | What it is                                                                         |
-| ------------------------------ | ---------------------------------------------------------------------------------- |
-| `app/routes/home.tsx`          | The home page                                                                      |
-| `app/routes/document.tsx`      | A community guideline's page, one route per guideline                              |
-| `app/routes/not-found.tsx`     | Every other path, published as `404.html`                                          |
-| `app/routes/privacy.tsx`       | The privacy note, and the switch that turns analytics on or off                    |
-| `app/routes/site.tsx`          | The header, the footer and the analytics banner around every page                  |
-| `app/components/analytics.tsx` | The analytics banner, in kanso-ui, and the measurement ID                          |
-| `app/projects.ts`              | What the home page lists: the project groups, the principles and the roadmaps      |
-| `app/documents.ts`             | Which guidelines are pages, at which paths, and where the links inside them lead   |
-| `app/documents.server.ts`      | Reads each guideline from GitHub as the site builds                                |
-| `app/styles/theme.css`         | The palette and type, as kanso-ui `--kui-*` tokens                                 |
-| `app/styles/layout.css`        | The pages' own layout: region rhythm, the columns that stack on a phone, the prose |
-| `app/root.tsx`                 | The document, its metadata, and the state shown when a page fails                  |
-| `public/`                      | The mark, the favicons and `analytics.js`, copied into the build as they are       |
+| Path                           | What it is                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------ |
+| `app/routes/home.tsx`          | The home page                                                                        |
+| `app/routes/document.tsx`      | A community guideline's page, one route per guideline                                |
+| `app/routes/not-found.tsx`     | Every other path, published as `404.html`                                            |
+| `app/routes/privacy.tsx`       | The privacy note, and the switch that turns analytics on or off                      |
+| `app/routes/site.tsx`          | The header, the footer and the analytics banner around every page                    |
+| `app/components/analytics.tsx` | The analytics banner, in kanso-ui, and the measurement ID                            |
+| `app/projects.ts`              | What the home page lists: the project groups, the principles and the roadmaps        |
+| `app/documents.ts`             | Which guidelines are pages, at which paths, and where the links inside them lead     |
+| `app/documents.server.ts`      | Reads each guideline from GitHub as the site builds                                  |
+| `app/styles/theme.css`         | The palette and type, as kanso-ui `--kui-*` tokens                                   |
+| `app/styles/layout.css`        | The pages' own layout: region rhythm, the columns that stack on a phone, the prose   |
+| `app/root.tsx`                 | The document, its metadata, and the state shown when a page fails                    |
+| `app/assets/`                  | The logo's SVG masters, from kanso-labs/brand, inlined by `app/components/marks.tsx` |
+| `public/`                      | The favicons, the manifest, the social card and `analytics.js`, copied as they are   |
 
 The design is the Claude Design canvas "Kanso Labs Home Page", direction A, Ink.
 It draws the page at desktop width in light and dark, and at a phone's.
@@ -119,11 +120,13 @@ the hero's headline and lede step down one type role each, through the same
 tokens kanso-ui's own roles read. kanso-ui's styles sit in cascade layers, so
 these unlayered rules win without raising their specificity.
 
-**The mark is the organization's avatar, a 460px raster with a white ground.**
-`public/kanso.png` and `public/leaf.png` are crops of it, and the `.mark` class
-multiplies them over the page so the white disappears, and inverts and screens
-them in the dark scheme so the ink turns light. Replace them with a vector the
-day one exists, and drop the blend.
+**The logo is kanso-labs/brand's, drawn inline in `currentColor`.**
+`app/assets/` holds the horizontal lockup and the leaf, copied unmodified from
+the brand's `logo/svg/`, and `Logo` in `app/components/marks.tsx` inlines them,
+so they take the text colour in either scheme. The favicons, the Apple touch
+icon, the manifest and its icons, and the social card in `public/` are the
+brand's files too, from `icons/` and `social/`. When the brand changes, copy its
+new files over these rather than drawing or editing them here.
 
 ## Analytics
 
