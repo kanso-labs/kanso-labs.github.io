@@ -135,12 +135,16 @@ Manager, behind Google Consent Mode v2.** The measurement ID, `G-G5J7LFENG0`, is
 public by nature, so it sits in `app/components/analytics.tsx` rather than in a
 secret. The property is shared with docs.kansolabs.org.
 
-**`public/analytics.js` is the same file in every Kanso Labs site that loads
-gtag.js itself**: this one, the Home Assistant applications site and both
-Storybooks. Change one copy and carry the change to the others. The attributes
-of the `<script>` tag that loads it, in `app/root.tsx`, say what differs between
-sites. Here `data-banner="none"` tells it the site draws the banner, which
-`components/analytics.tsx` does in kanso-ui through `window.kansoAnalytics`.
+**`public/analytics.js` is the one copy, which every Kanso Labs site that loads
+gtag.js itself loads from `https://kansolabs.org/analytics.js`**: this one,
+brand.kansolabs.org, docs.kansolabs.org, the Home Assistant applications site
+and both Storybooks. A change here reaches all of them when this site deploys,
+so keep its name stable and keep it working for every site: a site where it
+fails to load has no analytics and no banner. Pages serves it with a ten-minute
+cache. The attributes of the `<script>` tag that loads it, in `app/root.tsx`,
+say what differs between sites. Here `data-banner="none"` tells it the site
+draws the banner, which `components/analytics.tsx` does in kanso-ui through
+`window.kansoAnalytics`.
 
 **Ads signals are denied for everyone. Analytics storage is denied in the EEA,
 the UK and Switzerland, and granted elsewhere.** Google applies that default by
@@ -150,13 +154,22 @@ browser's time zone, since Pages gives a static site no geo header: every
 says nothing, such as `UTC`, ask. Where it asks, gtag.js is not loaded until the
 visitor allows it, so nothing reaches Google before then. Elsewhere it loads at
 once, with a notice that offers to opt out, and `/privacy` keeps the switch
-within reach from the footer. The choice is kept in local storage under
-`kanso-labs:analytics`.
+within reach from the footer.
 
-**GA's cookies stay on the site's own host** (`cookie_domain: 'none'`), since
-each Kanso Labs site keeps its own choice, and **nothing is sent from a host
-outside kansolabs.org**, so `npm run dev` and `npm run preview` draw the banner
-but never count in the live property.
+**The visitor answers once for every Kanso Labs site.** The choice is the
+`kl_consent` cookie on `.kansolabs.org`, kept 13 months, which Daily's web app
+reads and writes too: `granted` or `denied` is an answer everywhere, and
+`notice` means the visitor closed the notice outside the consent regions, which
+leaves analytics on there and counts as no answer where the site asks. On any
+other host the cookie is the host's own. A choice an older copy kept in the
+site's local storage under `kanso-labs:analytics` is moved into the cookie the
+first time, and the old key removed. Every site keeps that contract, so change
+it in all of them together.
+
+**GA's cookies stay on the site's own host** (`cookie_domain: 'none'`), so each
+site keeps its own client IDs, and **nothing is sent from a host outside
+kansolabs.org**, so `npm run dev` and `npm run preview` draw the banner but
+never count in the live property.
 
 **Which events are collected is set in GA, not here.** Enhanced measurement on
 the web stream records page views, scrolls, outbound clicks and file downloads,

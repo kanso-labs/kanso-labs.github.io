@@ -1,16 +1,20 @@
 /*
  * Google Analytics 4 behind Google Consent Mode v2, for the Kanso Labs sites.
  *
- * The same file is copied into every Kanso Labs site that loads gtag.js
- * itself. Keep the copies identical; what differs between sites is in the
- * attributes of the <script> tag that loads it:
+ * This is the one copy. Every Kanso Labs site that loads gtag.js itself loads
+ * this file from https://kansolabs.org/analytics.js, under that stable name,
+ * so a change here reaches all of them once kansolabs.org is deployed. If it
+ * fails to load, a site has no analytics and no banner, and nothing else
+ * breaks. What differs between sites is in the attributes of the <script> tag
+ * that loads it:
  *
  *   data-measurement-id  the GA4 measurement ID
  *   data-privacy-url     the site's privacy note, linked from the banner
  *   data-banner          "none" when the site draws the banner itself, through
  *                        window.kansoAnalytics; otherwise this file draws it
  *
- * A site that cannot set them, as on Mintlify, is listed in SITES below.
+ * A site that cannot write the tag itself, as on Mintlify, creates it from a
+ * script of its own and sets the same attributes on it.
  *
  * Ads signals are denied for everyone, always. Analytics storage is denied by
  * default in the EEA, the UK and Switzerland, where the visitor is asked
@@ -22,33 +26,32 @@
  * as one that asks. Where this file asks, gtag.js is not loaded at all until
  * the visitor agrees, so nothing reaches Google before then.
  *
- * GA's cookies are kept to the site's own host rather than shared across
- * kansolabs.org, since each site keeps its own choice. Nothing is sent from a
- * host outside kansolabs.org, such as localhost or a fork's own Pages site, so
- * a local build never counts in the live property.
+ * The visitor answers once for every Kanso Labs site. The choice is kept in
+ * the kl_consent cookie on kansolabs.org, which every subdomain reads and
+ * writes, Daily's web app among them; a choice an older copy of this file kept
+ * in the site's own local storage is moved into it the first time. On a host
+ * outside kansolabs.org the cookie is the host's own.
+ *
+ * GA's cookies are kept to the site's own host. Nothing is sent from a host
+ * outside kansolabs.org, such as localhost or a fork's own Pages site, so a
+ * local build never counts in the live property.
  */
 ;(function () {
   'use strict'
 
-  // Mintlify includes a site's .js files itself, with no attributes of their
-  // own, so docs.kansolabs.org's are written here instead.
-  var SITES = {
-    'docs.kansolabs.org': {
-      measurementId: 'G-G5J7LFENG0',
-      privacyUrl: '/privacy',
-    },
-  }
-
   var script = document.currentScript
-  var options =
-    (script && script.dataset && script.dataset.measurementId
-      ? script.dataset
-      : SITES[window.location.hostname]) || {}
+  var options = (script && script.dataset) || {}
   var id = options.measurementId
   if (!id || window.kansoAnalytics) return
 
   var live = /(^|\.)kansolabs\.org$/.test(window.location.hostname)
+  // Where an older copy of this file kept the site's own choice.
   var KEY = 'kanso-labs:analytics'
+  // The choice shared by every Kanso Labs site, for 13 months: granted or
+  // denied, or notice where the visitor outside the consent regions closed the
+  // notice, which leaves analytics on but is not an answer where the site asks.
+  var COOKIE = 'kl_consent'
+  var MAX_AGE = 34214400
   var EVENT = 'kanso-analytics'
 
   // Where analytics storage starts denied: the EU, with Åland and the
@@ -126,6 +129,8 @@
   var DENIED = 'denied'
   var GRANTED = 'granted'
   // Outside the consent regions: the visitor saw the notice and closed it.
+  var NOTICE = 'notice'
+  // What an older copy kept for the same.
   var NOTIFIED = 'notified'
 
   window.dataLayer = window.dataLayer || []
@@ -149,21 +154,62 @@
   })
   gtag('set', 'ads_data_redaction', true)
 
-  function read() {
-    try {
-      return window.localStorage.getItem(KEY)
-    } catch (error) {
-      return null
-    }
+  function cookie() {
+    var found = null
+    document.cookie.split(';').forEach(function (pair) {
+      var index = pair.indexOf('=')
+      if (pair.slice(0, index).trim() !== COOKIE) return
+      var value = pair.slice(index + 1).trim()
+      if (value === GRANTED || value === DENIED || value === NOTICE) {
+        found = value
+      }
+    })
+    return found
   }
 
   function write(value) {
+    // The old copy goes too, so that it cannot come back where cookies fail.
     try {
-      if (value) window.localStorage.setItem(KEY, value)
-      else window.localStorage.removeItem(KEY)
+      window.localStorage.removeItem(KEY)
     } catch (error) {
-      // Storage is off: the choice holds for this page only.
+      // Storage is off: there is nothing to remove.
     }
+    // A cookie of the same name kept to this host alone would be read beside
+    // the shared one, and could outlast it.
+    if (live) document.cookie = COOKIE + '=; Max-Age=0; Path=/'
+    document.cookie =
+      COOKIE +
+      '=' +
+      value +
+      '; Path=/; Max-Age=' +
+      MAX_AGE +
+      (live ? '; Domain=.kansolabs.org' : '') +
+      '; SameSite=Lax; Secure'
+  }
+
+  // The cookie, or else the choice an older copy kept in local storage, moved
+  // into the cookie. The old copy goes once the cookie holds a choice, so with
+  // cookies off it still stands.
+  function read() {
+    var value = cookie()
+    var moved = false
+    try {
+      var kept = window.localStorage.getItem(KEY)
+      if (kept === null) return value
+      if (kept === NOTIFIED) kept = NOTICE
+      var known = kept === GRANTED || kept === DENIED || kept === NOTICE
+      if (!value && known) {
+        moved = true
+        write(kept)
+        value = kept
+        // Kept where the cookie did not hold it, as with cookies off.
+        if (!cookie()) window.localStorage.setItem(KEY, kept)
+      }
+      if (!moved) window.localStorage.removeItem(KEY)
+    } catch (error) {
+      // Storage is off: there is nothing to move.
+    }
+    return value
   }
 
   function zone() {
@@ -216,7 +262,7 @@
   function prompt() {
     if (choice === GRANTED || choice === DENIED) return null
     if (asks) return 'consent'
-    return choice === NOTIFIED ? null : 'notice'
+    return choice === NOTICE ? null : 'notice'
   }
 
   function status() {
@@ -246,9 +292,10 @@
     announce()
   }
 
+  // Closing the notice is not consent: where a site asks, it still asks.
   function dismiss() {
     if (prompt() !== 'notice') return
-    choice = NOTIFIED
+    choice = NOTICE
     write(choice)
     announce()
   }
@@ -322,8 +369,8 @@
       var text = document.createElement('p')
       text.textContent =
         kind === 'consent'
-          ? 'May this site count your visit with Google Analytics? It records the pages you open, without your name or any account, and nothing is sent unless you allow it. '
-          : 'This site counts visits with Google Analytics: the pages opened, without your name or any account. '
+          ? 'May Kanso Labs count your visits with Google Analytics? It records the pages you open, without your name or any account, and nothing is sent unless you allow it. Your answer applies to every Kanso Labs site under kansolabs.org and is kept in a kansolabs.org cookie. '
+          : 'Kanso Labs sites count visits with Google Analytics: the pages opened, without your name or any account. Your choice applies to every Kanso Labs site under kansolabs.org and is kept in a kansolabs.org cookie. '
       if (window.kansoAnalytics.privacyUrl) {
         var link = document.createElement('a')
         link.href = window.kansoAnalytics.privacyUrl
