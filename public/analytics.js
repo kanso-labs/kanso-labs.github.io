@@ -168,6 +168,9 @@
   }
 
   function write(value) {
+    // A cookie of the same name kept to this host alone would be read beside
+    // the shared one, and could outlast it.
+    if (live) document.cookie = COOKIE + '=; Max-Age=0; Path=/'
     document.cookie =
       COOKIE +
       '=' +
@@ -175,24 +178,24 @@
       '; Path=/; Max-Age=' +
       MAX_AGE +
       (live ? '; Domain=.kansolabs.org' : '') +
-      '; SameSite=Lax' +
-      (window.location.protocol === 'https:' ? '; Secure' : '')
+      '; SameSite=Lax; Secure'
   }
 
   // The cookie, or else the choice an older copy kept in local storage, moved
-  // into the cookie; either way the old copy goes. With cookies off, the
-  // choice holds for this page only.
+  // into the cookie. The old copy goes once the cookie holds a choice, so with
+  // cookies off it still stands.
   function read() {
     var value = cookie()
     try {
       var kept = window.localStorage.getItem(KEY)
       if (kept === null) return value
-      window.localStorage.removeItem(KEY)
       if (kept === NOTIFIED) kept = NOTICE
-      if (!value && (kept === GRANTED || kept === DENIED || kept === NOTICE)) {
+      var known = kept === GRANTED || kept === DENIED || kept === NOTICE
+      if (!value && known) {
         write(kept)
         value = kept
       }
+      if (cookie() || !known) window.localStorage.removeItem(KEY)
     } catch (error) {
       // Storage is off: there is nothing to move.
     }
@@ -356,8 +359,8 @@
       var text = document.createElement('p')
       text.textContent =
         kind === 'consent'
-          ? 'May Kanso Labs count your visits with Google Analytics? It records the pages you open, without your name or any account, and nothing is sent unless you allow it. Your answer applies to every Kanso Labs site under kansolabs.org. '
-          : 'Kanso Labs sites count visits with Google Analytics: the pages opened, without your name or any account. Your choice applies to every Kanso Labs site under kansolabs.org. '
+          ? 'May Kanso Labs count your visits with Google Analytics? It records the pages you open, without your name or any account, and nothing is sent unless you allow it. Your answer applies to every Kanso Labs site under kansolabs.org and is kept in a kansolabs.org cookie. '
+          : 'Kanso Labs sites count visits with Google Analytics: the pages opened, without your name or any account. Your choice applies to every Kanso Labs site under kansolabs.org and is kept in a kansolabs.org cookie. '
       if (window.kansoAnalytics.privacyUrl) {
         var link = document.createElement('a')
         link.href = window.kansoAnalytics.privacyUrl
